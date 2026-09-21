@@ -7,9 +7,10 @@ class H(http.server.SimpleHTTPRequestHandler):
     def translate_path(s,path):
         if path.split("?")[0] in ("/","/index.html"):
             en="lang=en" in (s.headers.get("Cookie") or "").replace(" ","").split(";")
-            return os.path.join(ROOT,"index.en.html" if en else "index.html")
-        if "?" in path and path.startswith("/ajax/"):
-            return os.path.join(ROOT,urllib.parse.unquote(path.lstrip("/")))
+            return os.path.join(ROOT,"index.en.html" if en else "index.bn.html")
+        if "?" in path and path.startswith("/ajax/get/office-level/"):
+            u=urllib.parse.urlsplit(path); t=urllib.parse.parse_qs(u.query).get("office_type_id",[""])[0]
+            return os.path.join(ROOT,u.path.lstrip("/")+"__"+t)
         return super().translate_path(path)
     def end_headers(s):
         s.send_header("Vary","Cookie"); s.send_header("Cache-Control","no-store"); super().end_headers()

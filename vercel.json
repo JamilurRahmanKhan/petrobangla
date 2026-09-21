@@ -1,0 +1,16 @@
+{
+  "outputDirectory": "site",
+  "buildCommand": null,
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "has": [{ "type": "cookie", "key": "lang", "value": "en" }], "destination": "/index.en.html" },
+    { "source": "/", "destination": "/index.bn.html" },
+    { "source": "/index.html", "has": [{ "type": "cookie", "key": "lang", "value": "en" }], "destination": "/index.en.html" },
+    { "source": "/index.html", "destination": "/index.bn.html" },
+    { "source": "/ajax/get/office-level/:id/offices", "has": [{ "type": "query", "key": "office_type_id", "value": "(?<t>[0-9a-f]+)" }], "destination": "/ajax/get/office-level/:id/offices__:t" }
+  ],
+  "headers": [
+    { "source": "/", "headers": [{ "key": "Cache-Control", "value": "private, no-cache" }, { "key": "Vary", "value": "Cookie" }] },
+    { "source": "/ajax/(.*)", "headers": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }] }
+  ]
+}

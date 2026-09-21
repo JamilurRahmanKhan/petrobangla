@@ -15,6 +15,6 @@ Interactive content (notice board, service boxes) is static as of capture (2026-
 Live-only features (search, real backends) are not connected.
 
 ## Design polish layer
-`site/assets/polish.css` and `polish.js` are loaded after the original styles (linked at the end of `<head>`/`<body>` in `site/index.html`).
+`site/assets/polish.css` and `polish.js` are loaded after the original styles (linked at the end of `<head>`/`<body>` in `site/index.bn.html`).
 Remove those two tags to get the untouched 1:1 clone back. Adds: legible banner title clear of the logo, gradient header/nav with hover states,
 rounded elevated cards, refined section headings, scroll-reveal (disabled for reduced-motion), gold focus rings.
