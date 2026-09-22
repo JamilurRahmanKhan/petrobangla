@@ -356,75 +356,7 @@ body{background:linear-gradient(160deg,#eef7f1 0%,#f7fbf8 45%,#eaf3ee 100%) fixe
 }
 
 /* =============== 3D GLASSMORPHIC CARDS v2 =============== */
-body{background:
-  radial-gradient(720px 480px at 8% 0%,rgba(0,168,84,.22),transparent 60%),
-  radial-gradient(640px 520px at 96% 18%,rgba(242,182,50,.20),transparent 60%),
-  radial-gradient(900px 700px at 30% 70%,rgba(0,96,42,.16),transparent 60%),
-  radial-gradient(700px 600px at 90% 95%,rgba(0,168,84,.18),transparent 60%),
-  linear-gradient(160deg,#eef7f1 0%,#f4f9f6 50%,#eaf3ee 100%) fixed!important;background-attachment:fixed,fixed,fixed,fixed,fixed}
-:root{--g-bg:linear-gradient(155deg,rgba(255,255,255,.62),rgba(255,255,255,.28));--g-brd:rgba(255,255,255,.75);
-  --g-sh:0 2px 4px rgba(0,40,20,.06),0 14px 30px -6px rgba(0,60,30,.28),0 30px 60px -20px rgba(0,60,30,.30),inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 12px rgba(255,255,255,.35)}
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget{
-  background:var(--g-bg)!important;-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);
-  border:1.5px solid var(--g-brd)!important;box-shadow:var(--g-sh)!important;border-radius:20px!important;
-  position:relative;overflow:hidden!important;transform-style:preserve-3d;perspective:800px;
-  transition:transform .45s cubic-bezier(.2,.8,.3,1),box-shadow .45s cubic-bezier(.2,.8,.3,1)}
-.block-widget-container::before,.notice-news-card-widget::before,.service-box-widget::before,.person-card-widget::before,
-.internal-eservice-card-widget::before,.important-link-card-widget::before,.video-card-carousel-container::before{
-  content:"";position:absolute;inset:-40% -40% auto -40%;height:75%;background:linear-gradient(115deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,.15) 40%,transparent 70%);
-  transform:rotate(-6deg);pointer-events:none;z-index:0}
-.block-widget-container::after,.notice-news-card-widget::after,.service-box-widget::after,.person-card-widget::after,
-.internal-eservice-card-widget::after,.important-link-card-widget::after{content:"";position:absolute;inset:0;border-radius:inherit;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);pointer-events:none;z-index:2}
-.block-widget-container>*,.notice-news-card-widget>*,.service-box-widget>*,.person-card-widget>*{position:relative;z-index:1}
-.person-card-header,.block-widget .block-widget-title{background:linear-gradient(120deg,rgba(0,70,36,.9),rgba(0,140,55,.72) 55%,rgba(0,70,36,.85))!important;
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35)!important;border-bottom:none!important;
-  border-radius:18px 18px 0 0!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 4px 12px rgba(0,60,30,.2)!important}
-.person-card-widget img{border-radius:14px;box-shadow:0 10px 24px rgba(0,30,15,.28);margin:14px 14px 0;width:calc(100% - 28px)!important;
-  transition:transform .5s cubic-bezier(.2,.8,.3,1)}
-.person-card-widget:hover img{transform:scale(1.04) translateZ(20px)}
-.service-box-widget:hover,.person-card-widget:hover,.internal-eservice-card-widget:hover{
-  transform:translateY(-8px) rotateX(3deg) scale(1.015)!important;
-  box-shadow:0 4px 8px rgba(0,40,20,.08),0 24px 48px -8px rgba(0,60,30,.38),0 40px 80px -24px rgba(0,60,30,.4),inset 0 1px 0 rgba(255,255,255,.9)!important}
-.service-box-img-container{background:linear-gradient(145deg,rgba(255,255,255,.6),rgba(255,255,255,.15))!important;box-shadow:0 6px 16px rgba(0,40,20,.18),inset 0 1px 0 rgba(255,255,255,.6)!important}
-.office-findthree-widget select{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.pb-footer-main .text-xs{background:linear-gradient(155deg,rgba(255,255,255,.9),rgba(255,255,255,.55))!important;
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--g-sh)!important;border:1.5px solid var(--g-brd)!important}
-@media (prefers-reduced-motion:reduce){
-  .service-box-widget,.person-card-widget,.internal-eservice-card-widget{transition:none!important}
-  .service-box-widget:hover,.person-card-widget:hover,.internal-eservice-card-widget:hover{transform:none!important}
-}
-@media (max-width:600px){
-  .block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-}
-
-/* =============== MOBILE STACK: breathing room between + around cards =============== */
-@media (max-width:1099px){
-  .wrapper{margin:0 auto!important;padding:0 18px;box-sizing:border-box;max-width:640px!important}
-  [data-section_type="body"]>.droppable>*,[data-section_type="right"]>.droppable>*{
-    display:block;margin:0 0 22px!important}
-  [data-section_type="body"]>.droppable>*:last-child,[data-section_type="right"]>.droppable>*:last-child{margin-bottom:4px!important}
-  .wrapper>.left,.wrapper>.right,.wrapper>.body{margin:0!important;flex-basis:auto!important}
-}
-.person-card-widget{padding-bottom:22px!important}
-.person-card-ls{margin-top:16px!important;margin-bottom:6px!important}
-.person-card-header{padding:14px 18px!important;font-size:15px!important}
-.person-card-widget .person-card-org-name{font-size:15px!important;font-weight:700!important;color:var(--pb-ink)!important}
-.person-card-widget img{margin:16px 16px 0!important;width:calc(100% - 32px)!important;border-radius:14px!important}
-
-/* =============== GLASS v3: tinted glass + ambient halo so cards blend into the page =============== */
-body{background:
-  radial-gradient(760px 520px at 6% 4%,rgba(0,168,84,.32),transparent 62%),
-  radial-gradient(680px 560px at 98% 14%,rgba(242,182,50,.28),transparent 62%),
-  radial-gradient(820px 680px at 22% 46%,rgba(0,133,50,.26),transparent 62%),
-  radial-gradient(760px 640px at 82% 66%,rgba(0,96,42,.24),transparent 62%),
-  radial-gradient(700px 600px at 30% 96%,rgba(242,182,50,.20),transparent 62%),
-  radial-gradient(760px 640px at 92% 100%,rgba(0,168,84,.26),transparent 62%),
-  linear-gradient(160deg,#e9f5ee 0%,#f1f8f4 50%,#e6f1ea 100%) fixed!important}
+body{background:#f6f8f7!important}
 :root{--g-bg:linear-gradient(155deg,rgba(255,255,255,.22),rgba(255,255,255,.08));--g-halo:0 0 0 1px rgba(255,255,255,.5) inset,0 20px 50px -12px rgba(0,110,55,.30),0 4px 14px rgba(0,80,40,.14)}
 .block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
 .important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
