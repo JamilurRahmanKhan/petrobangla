@@ -12,13 +12,18 @@ html{scroll-behavior:smooth}
 body{color:var(--pb-ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
 /* ---- top utility bar ---- */
+/* select/button styling lives in ONE place now: the "office finder row" section further down. It used to
+   be split across here and there, which is exactly how the last regression happened (two rules for the
+   same element, edited one and not the other) */
 .header-widget-section{background:linear-gradient(90deg,var(--pb-green-ink),var(--pb-green-deep) 45%,var(--pb-green))!important}
-.header-widget-section select{border-radius:var(--pb-radius-sm)!important;transition:background .2s var(--pb-ease)}
-.header-widget-section select:hover{background-color:rgba(255,255,255,.28)!important}
-.office-findthree-widget button,.office-findthree-widget .btn{border-radius:var(--pb-radius-sm)!important;background:var(--pb-red)!important;font-weight:600;letter-spacing:.2px;transition:transform .2s var(--pb-ease),box-shadow .2s var(--pb-ease)}
-.office-findthree-widget button:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(229,48,63,.4)}
+/* the office-finder's wrapping section defaults to min-width:auto as a flex item of the header row, which
+   (same issue as the office-group chain below) can block it from ever shrinking — only the second
+   .header-left-section (office finder), never the first (site title, which should stay fully readable) */
+.header-widget-section .header-left-section+.header-left-section{min-width:0}
 .global-search-widget input{box-shadow:0 2px 8px rgba(0,0,0,.15);transition:box-shadow .2s var(--pb-ease)}
 .global-search-widget input:focus{box-shadow:0 0 0 3px rgba(242,182,50,.55)}
+.global-search-widget{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border-radius:999px!important;overflow:hidden}
+.language-switcher-widget .btn-lang-change{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 
 /* ---- banner: legible title, clear of the corporate logo ---- */
 .home-carousel{position:relative;isolation:isolate}
@@ -81,36 +86,89 @@ a[class*=btn]:hover,a[class*=view-all]:hover{transform:translateY(-2px);box-shad
 .hamburger-menu-block,.hamburger-menu-block span{color:#fff!important;font-weight:600}
 
 /* ---- office finder row: equal controls, one height, one alignment ---- */
-.office-findthree-widget{display:flex;align-items:center;gap:6px}
-.office-findthree-widget .office-group,.office-findthree-widget .dynamic-dropdowns{display:flex;align-items:center;gap:6px;width:auto!important;margin:0}
-.office-findthree-widget select,.office-findthree-widget button{box-sizing:border-box;height:30px!important;margin:0!important;line-height:1.2;font-size:13px!important;font-family:inherit;border-radius:var(--pb-radius-sm)!important}
+/* min-width:0 on every level of this flex chain, not just the selects themselves — a flex container that is
+   ALSO a flex item defaults to min-width:auto (sized to its own content), which silently blocks shrinking
+   from ever reaching the selects at all if a wrapping level further up never shrinks past its own content
+   size. This is the same "invisible floor" that caused the scrollbar regression, one level higher up. */
+.office-findthree-widget{display:flex;align-items:center;gap:6px;min-width:0}
+.office-findthree-widget .office-group,.office-findthree-widget .dynamic-dropdowns{display:flex;align-items:center;gap:6px;width:auto!important;margin:0;min-width:0}
+.office-findthree-widget select,.office-findthree-widget button{box-sizing:border-box;height:32px!important;margin:0!important;line-height:1.2;font-size:13px!important;font-family:inherit;border-radius:999px!important}
+
+/* glass-3D chip. Native <select> can't render ::before/::after in any browser (unlike <button>, it's a
+   restricted replaced element), so there's no diagonal sheen here — the glass reads through a layered
+   gradient fill, a bevelled rim (bright top-left / dark bottom-right insets, same trick used on the card
+   widgets), backdrop blur, and a real drop shadow instead. */
 .office-findthree-widget select{
-  width:110px!important;min-width:0;padding:0 26px 0 10px!important;color:#fff;cursor:pointer;
+  padding:0 30px 0 12px!important;color:#fff;cursor:pointer;
   appearance:none;-webkit-appearance:none;
-  background:rgba(255,255,255,.16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center!important;
-  border:1px solid rgba(255,255,255,.28)!important;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
-  transition:background-color .2s var(--pb-ease),border-color .2s var(--pb-ease)}
-.office-findthree-widget select:hover{background-color:rgba(255,255,255,.26)!important;border-color:rgba(255,255,255,.5)!important}
-.office-findthree-widget select:focus-visible{border-color:var(--pb-gold)!important}
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center,
+    linear-gradient(165deg,rgba(255,255,255,.3),rgba(255,255,255,.08))!important;
+  -webkit-backdrop-filter:blur(8px) saturate(1.3);backdrop-filter:blur(8px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.38)!important;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.4),
+    inset -1px -1px 0 rgba(0,20,10,.2),
+    0 6px 14px -4px rgba(0,20,10,.38)!important;
+  text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
+  transition:border-color .2s var(--pb-ease),box-shadow .2s var(--pb-ease),transform .2s var(--pb-ease)}
+.office-findthree-widget select:hover{
+  border-color:rgba(255,255,255,.65)!important;transform:translateY(-1px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.55),
+    inset -1px -1px 0 rgba(0,20,10,.22),
+    0 10px 20px -6px rgba(0,20,10,.44)!important}
+.office-findthree-widget select:focus-visible{border-color:var(--pb-gold)!important;outline:2px solid var(--pb-gold);outline-offset:1px}
 .office-findthree-widget select option{color:#1b2a22;background:#fff}
+
+/* "Show" is a real <button>, so it gets the full treatment including the diagonal gloss streak — same
+   recipe as the "Show all notices" / "Show all services" CTAs. Red reads as "stop / delete / danger" in
+   standard UI convention, which is a mismatch for a neutral "reveal results" action — that's almost
+   certainly what read as unfriendly. Switched to a trustworthy blue, the conventional safe/primary-action
+   colour, which also stands out clearly against the all-green/gold bar without any alarm connotation. */
 .office-findthree-widget button{
-  padding:0 14px!important;min-width:62px;font-weight:600;border:1px solid transparent!important;color:#fff;cursor:pointer;white-space:nowrap}
+  position:relative;overflow:hidden;isolation:isolate;
+  padding:0 16px!important;min-width:64px;font-weight:700;border:1px solid rgba(255,255,255,.4)!important;
+  background:linear-gradient(180deg,#4c8ff0,#2f6fe0)!important;
+  color:#fff!important;cursor:pointer;white-space:nowrap;
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.4),0 6px 16px -4px rgba(0,20,10,.4)!important;
+  transition:transform .2s var(--pb-ease),box-shadow .2s var(--pb-ease)}
+.office-findthree-widget button::before{
+  content:"";position:absolute;inset:-40% -10%;z-index:-1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 46%,rgba(255,255,255,.15) 54%,transparent 66%);
+  transition:transform .5s var(--pb-ease)}
+.office-findthree-widget button:hover{
+  transform:translateY(-1px);
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.75),0 10px 22px -4px rgba(0,20,10,.48)!important}
+.office-findthree-widget button:hover::before{transform:translateX(12%)}
+.office-findthree-widget button:disabled{
+  background:rgba(255,255,255,.16)!important;color:rgba(255,255,255,.55)!important;border-color:rgba(255,255,255,.25)!important;
+  box-shadow:none!important;cursor:not-allowed;transform:none!important}
+.office-findthree-widget button:disabled::before{display:none}
+
 @media (max-width:767px){
   .office-findthree-widget,.office-findthree-widget .office-group,.office-findthree-widget .dynamic-dropdowns{flex-direction:column;width:100%}
   .office-findthree-widget select{width:min(260px,80vw)!important}
   .office-findthree-widget button{width:min(260px,80vw);}
 }
 
-/* specificity + max-width fix: beat `.office-findthree-widget .office-group select{max-width:80px;height:24px}` */
+/* specificity fix: beats the base theme's own `.office-findthree-widget .office-group select{max-width:80px}`.
+   REGRESSION FIXED HERE: a previous pass locked this to a rigid width:168px/min-width:168px — with no give,
+   3 selects at once had nowhere to shrink when the page's real preselected value ran long (the full
+   corporation name, not the short placeholder this was tested with), so the row overflowed and the base
+   theme's dormant ".header-left-section + .header-left-section{overflow-x:auto}" kicked in as a visible
+   scrollbar. flex-shrink + a real min-width floor (90px, not 168px) lets the row size itself down instead
+   of forcing that overflow, while still defaulting wider than the original, too-tight 110px */
 .widget.office-findthree-widget .office-group select{
-  width:110px!important;min-width:110px!important;max-width:110px!important;height:30px!important;padding:0 26px 0 10px!important;
-  font-size:13px!important;border-width:1px!important;box-shadow:none!important}
+  flex:0 1 140px!important;width:140px!important;min-width:90px!important;max-width:150px!important;
+  height:32px!important;padding:0 30px 0 12px!important;
+  font-size:13px!important;border-width:1px!important;border-radius:999px!important}
 .widget.office-findthree-widget .office-group button{
-  height:30px!important;min-width:62px!important;padding:0 14px!important;margin:0!important;font-size:13px!important;box-shadow:0 2px 8px rgba(229,48,63,.35)!important}
+  flex:none!important;height:32px!important;min-width:64px!important;padding:0 16px!important;margin:0!important;font-size:13px!important}
 .widget.office-findthree-widget .office-group,.widget.office-findthree-widget .dynamic-dropdowns{flex-wrap:nowrap!important;gap:6px!important}
 .widget.office-findthree-widget.top-menu{padding:0!important;gap:6px}
 @media (max-width:767px){
-  .widget.office-findthree-widget .office-group select,.widget.office-findthree-widget .office-group button{width:min(260px,80vw)!important;min-width:0!important;max-width:none!important}
+  .widget.office-findthree-widget .office-group select,.widget.office-findthree-widget .office-group button{width:min(260px,80vw)!important;min-width:0!important;max-width:none!important;flex:none!important}
   .widget.office-findthree-widget .office-group,.widget.office-findthree-widget .dynamic-dropdowns{flex-direction:column;align-items:center}
 }
 
@@ -190,20 +248,142 @@ strong.notice-tag.pb-tag-new{background:var(--pb-red)!important;color:#fff!impor
 .service-box-stack-widget-title{color:var(--pb-green-deep)!important;font-weight:700}
 
 /* ---- photo slider ---- */
-.home-photo-slider-widget-carousel{border-radius:var(--pb-radius) var(--pb-radius) 0 0;overflow:hidden}
-.photo-slider-caption{background:linear-gradient(0deg,rgba(0,24,12,.85),rgba(0,24,12,0))!important;font-weight:600;font-size:15px;padding:28px 16px 12px!important;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.home-photo-slider-widget-carousel{
+  border-radius:20px!important;overflow:hidden;
+  box-shadow:0 26px 60px -24px rgba(0,40,20,.4),0 4px 16px rgba(0,30,15,.16);
+  border:1px solid rgba(255,255,255,.35)}
+/* the widget's own base CSS already had the right idea — a sharp "contain" photo over a blurred "cover" copy
+   of itself, so mismatched-aspect photos get a blurred-photo letterbox instead of empty bars. it was just
+   tuned wrong: a near-opaque black fill (#0008) drowned the blur out into a flat dark bar. lightening it and
+   pushing the blur/darken further lets that letterbox actually read as a soft, cinematic backdrop */
+.home-photo-slider-widget-slider-image{
+  background-color:rgba(0,14,7,.22)!important;
+  -webkit-backdrop-filter:blur(30px) brightness(.6) saturate(1.4)!important;
+  backdrop-filter:blur(30px) brightness(.6) saturate(1.4)!important}
+.photo-slider-caption{
+  background:linear-gradient(0deg,rgba(0,18,9,.92) 0%,rgba(0,18,9,.6) 55%,transparent 100%)!important;
+  font-weight:700;font-size:17px!important;letter-spacing:.2px;
+  padding:48px 22px 20px 30px!important;text-shadow:0 1px 6px rgba(0,0,0,.5);
+  bottom:0!important;left:0!important;right:0!important}
+.photo-slider-caption::before{
+  content:"";position:absolute;left:22px;bottom:22px;width:4px;height:1.1em;border-radius:2px;background:var(--pb-gold)}
 .home-photo-slider-widget-slider-next,.home-photo-slider-widget-slider-previous{
-  background:rgba(255,255,255,.85)!important;color:var(--pb-green-deep)!important;border-radius:50%!important;width:40px!important;height:40px!important;display:grid!important;place-items:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .2s var(--pb-ease),background .2s}
+  background:linear-gradient(165deg,rgba(255,255,255,.9),rgba(255,255,255,.6))!important;
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.75)!important;color:var(--pb-green-deep)!important;
+  border-radius:50%!important;width:50px!important;height:50px!important;display:grid!important;place-items:center;
+  font-size:0!important;margin-top:-25px!important;
+  box-shadow:0 12px 26px -8px rgba(0,20,10,.4),0 1px 0 rgba(255,255,255,.85) inset;
+  transition:transform .25s var(--pb-ease),background .25s var(--pb-ease),box-shadow .25s var(--pb-ease)}
+.home-photo-slider-widget-slider-previous{left:16px}
+.home-photo-slider-widget-slider-next{right:16px}
+.home-photo-slider-widget-slider-next::before,.home-photo-slider-widget-slider-previous::before{
+  content:"";width:11px;height:11px;border-right:3px solid currentColor;border-bottom:3px solid currentColor}
+.home-photo-slider-widget-slider-previous::before{transform:rotate(135deg);margin-left:5px}
+.home-photo-slider-widget-slider-next::before{transform:rotate(-45deg);margin-right:5px}
 .home-photo-slider-widget-slider-next:hover,.home-photo-slider-widget-slider-previous:hover{background:#fff!important;transform:scale(1.08)}
-.home-photo-slider-widget-slider-navigation-img{border-radius:8px;opacity:.7;transition:opacity .2s,transform .2s var(--pb-ease),box-shadow .2s;cursor:pointer}
-.home-photo-slider-widget-slider-navigation-img:hover{opacity:1;transform:translateY(-2px)}
-.home-photo-slider-widget-slider-navigation-img.active{opacity:1;box-shadow:0 0 0 3px var(--pb-green)}
+
+/* thumbnail tray: its own small glass panel, matching the rest of the site's material */
+.home-photo-slider-widget-block{
+  background:linear-gradient(165deg,rgba(255,255,255,.78),rgba(255,255,255,.5))!important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.6)!important;
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.9),0 12px 28px -16px rgba(0,50,25,.25)!important;
+  border-radius:16px!important;padding:10px}
+.home-photo-slider-widget-navigator{gap:10px}
+.home-photo-slider-widget-slider-navigation-img{
+  border-radius:12px!important;width:112px!important;height:66px!important;
+  border:2px solid rgba(255,255,255,.85)!important;opacity:.82;
+  box-shadow:0 4px 12px -5px rgba(0,30,15,.3);
+  transition:opacity .2s,transform .25s var(--pb-ease),box-shadow .25s var(--pb-ease),border-color .25s}
+.home-photo-slider-widget-slider-navigation-img:hover{opacity:1;transform:translateY(-3px);box-shadow:0 12px 22px -8px rgba(0,30,15,.35)}
+.home-photo-slider-widget-slider-navigation-img.active{opacity:1;transform:translateY(-2px);box-shadow:0 10px 20px -6px rgba(0,96,42,.4)}
+/* the scroll-nudge buttons had zero styling from the base theme — bare default <button> chrome sitting
+   on top of the thumbnails, which is what read as odd little squares. give them the same glass-circle
+   treatment as the main prev/next arrows, just smaller */
+.home-photo-slider-widget-btn-container{top:50%!important;transform:translateY(-50%)}
+.home-photo-slider-widget-scroll-left-btn,.home-photo-slider-widget-scroll-right-btn{
+  all:unset;cursor:pointer;pointer-events:all;box-sizing:border-box;
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  margin:0 4px;font-size:13px;color:var(--pb-green-deep);
+  background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.8);box-shadow:0 4px 12px -4px rgba(0,30,15,.35);
+  transition:transform .2s var(--pb-ease),background .2s}
+.home-photo-slider-widget-scroll-left-btn:hover,.home-photo-slider-widget-scroll-right-btn:hover{background:#fff;transform:scale(1.1)}
+
+@media (max-width:767px){
+  .home-photo-slider-widget-carousel{height:300px!important}
+}
+@media (max-width:480px){
+  .home-photo-slider-widget-carousel{height:230px!important}
+  .home-photo-slider-widget-slider-next,.home-photo-slider-widget-slider-previous{width:44px!important;height:44px!important;margin-top:-22px!important}
+}
 
 /* ---- video cards ---- */
-.video-gallery-widget-slider{border-radius:var(--pb-radius-sm);overflow:hidden;transition:transform .25s var(--pb-ease),box-shadow .25s var(--pb-ease)}
-.video-gallery-widget-slider:hover{transform:translateY(-3px);box-shadow:var(--pb-shadow-hover)}
-.video-gallery-widget-slider .caption h4{font-size:14.5px!important;font-weight:600;line-height:1.45;color:var(--pb-ink)!important}
+/* was: heavy frosted glass + a pulsing play button. Client feedback: too showy for a government site —
+   redone as a plain, conventional media-card panel: flat surface, one clean shadow, no blur/glow/pulse */
+.video-card-carousel-container{
+  background:var(--pb-tint)!important;border:1px solid var(--pb-line)!important;
+  box-shadow:none!important;border-radius:14px!important}
+/* a real section label — every other card widget on this page has one, this one never did.
+   attached to .slider-carousel (not the outer container) so it lines up with the 90%-width card
+   row below it, rather than sitting flush against the container's own edge */
+.slider-carousel::before{
+  content:"Video Gallery";display:block;margin:2px 0 20px;padding-left:12px;
+  border-left:3px solid var(--pb-gold);
+  font-size:15px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--pb-green-deep)}
+
+/* REAL BUG FIX (previous attempt was incomplete): the base theme sets each card to "flex:none", which is
+   shorthand for flex-shrink:0 — the cards REFUSE to shrink no matter what the container does. On top of
+   that, flex items get an invisible "min-width:auto" by default, which blocks shrinking below the content's
+   own intrinsic size even if flex-shrink is later turned back on. Between those two, if the panel's real
+   width is ever less than "2 cards + gap", a card has no way to get smaller — it just overflows and the
+   panel's overflow:hidden silently clips it. That's the half-cut card.
+   Fix: let cards shrink (flex-shrink:1) with min-width:0 (removes the invisible floor), so two cards always
+   divide whatever width is actually available instead of demanding a fixed size the panel may not have. */
+.video-gallery-widget-carousel{width:fit-content;max-width:100%;margin:0 auto}
+.video-gallery-widget-slider{
+  flex-shrink:1!important;min-width:0!important;
+  max-width:380px!important;border-radius:12px!important;overflow:hidden;
+  background:#fff!important;border:1px solid var(--pb-line)!important;
+  box-shadow:0 2px 4px rgba(0,20,10,.06),0 16px 32px -12px rgba(0,20,10,.18);
+  transition:box-shadow .25s var(--pb-ease),transform .25s var(--pb-ease)}
+.video-gallery-widget-slider:hover{transform:translateY(-5px);box-shadow:0 4px 8px rgba(0,20,10,.1),0 26px 44px -14px rgba(0,20,10,.26)}
+.video-thumbnail{height:205px!important;border-top:3px solid var(--pb-gold)}
+.video-gallery-widget-slider .caption{padding:12px 6px 8px}
+.video-gallery-widget-slider .caption h4{font-size:16.5px!important;font-weight:700;line-height:1.4;color:var(--pb-ink)!important;letter-spacing:.1px}
+
+/* thumbnail: a light, standard zoom-on-hover — the one motion cue every video card site already uses */
+.thumbnail-wrapper img{transition:transform .4s var(--pb-ease)}
+.video-gallery-widget-slider:hover .thumbnail-wrapper img{transform:scale(1.04)}
+
+/* play button: a plain solid circle, not glass — legible on any thumbnail, brand green on hover, no pulse */
+.play-icon{
+  width:58px!important;height:58px!important;
+  background:rgba(0,20,10,.55)!important;border:2px solid #fff!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  transition:background .2s var(--pb-ease),transform .2s var(--pb-ease)}
+.play-icon svg{width:22px!important;height:22px!important;margin-left:2px}
+.video-gallery-widget-slider:hover .play-icon{background:var(--pb-green)!important;transform:translate(-50%,-50%) scale(1.08)}
+
+/* nav arrows: plain flat circle, matching the rest of this pass's restraint —
+   ".slider-previous/.slider-next" is a generic pair of class names also used by the hero banner, hence the scope */
+.video-card-carousel-widget .slider-previous,.video-card-carousel-widget .slider-next{
+  width:42px!important;height:42px!important;top:150px!important;margin-top:-21px!important;
+  background:#fff!important;border:1px solid var(--pb-line)!important;color:var(--pb-green-deep)!important;
+  box-shadow:0 4px 12px rgba(0,20,10,.2)!important;
+  font-size:0!important;transition:background .2s var(--pb-ease)}
+.video-card-carousel-widget .slider-previous::before,.video-card-carousel-widget .slider-next::before{
+  content:"";width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor}
+.video-card-carousel-widget .slider-previous::before{transform:rotate(135deg);margin-left:3px}
+.video-card-carousel-widget .slider-next::before{transform:rotate(-45deg);margin-right:3px}
+.video-card-carousel-widget .slider-previous:hover,.video-card-carousel-widget .slider-next:hover{background:var(--pb-tint)!important}
+/* the base theme deliberately widens each card to 85% of the viewport on phones (one-card-per-swipe) via
+   its own max-width:none — my desktop max-width:380px!important would otherwise beat that (both !important,
+   mine later) and force phones back down to a cramped 380px card, so it's undone here below 600px */
+@media (max-width:600px){
+  .video-gallery-widget-slider{max-width:none!important}
+}
 
 @media (max-width:767px){
   .notice-title{font-size:18px!important}
@@ -228,20 +408,20 @@ strong.notice-tag.pb-tag-new{background:var(--pb-red)!important;color:#fff!impor
 .news-card .all-btn{margin:0!important}
 .news-card .all-btn a,.news-card-widget .all-btn a{min-height:34px!important;padding:0 16px!important;font-size:13px!important;box-shadow:none!important}
 
-/* ---- service card: header row (icon + title), list below ---- */
-.service-box-widget{display:grid!important;grid-template-columns:52px 1fr;column-gap:14px;row-gap:10px;align-content:start;align-items:center}
+/* ---- service card: gradient hero band (icon) on top, title below, list below that ---- */
+.service-box-widget{display:grid!important;grid-template-columns:1fr;column-gap:0;row-gap:0;align-content:start;align-items:center}
 .service-box-widget .service-box-grid{display:contents!important}
 .service-box-widget .service-box-img-container{grid-column:1;grid-row:1;width:52px!important;height:52px;border-radius:14px;background:var(--pb-tint);border:1px solid var(--pb-line);display:grid;place-items:center;overflow:hidden}
 .service-box-widget .service-box-img-container img{width:100%!important;height:100%!important;padding:8px!important;object-fit:contain;border:0;border-radius:0!important;background:none}
-.service-box-widget .service-box-title{grid-column:2;grid-row:1;margin:0!important}
-.service-box-widget .service-box-col-span-8{grid-column:1 / -1;grid-row:2}
+.service-box-widget .service-box-title{grid-column:1;grid-row:2;margin:0!important}
+.service-box-widget .service-box-col-span-8{grid-column:1;grid-row:3}
 .service-box-widget .service-box-list{margin-top:0!important}
 .service-box-widget .service-box-title{position:static!important;inset:auto!important;transform:none!important;width:auto!important;height:auto!important;padding:0!important;
   display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;align-self:center}
 
-/* slider: white caption, ring that isn't clipped */
+/* slider: white caption, ring that isn't clipped — keeps its lift shadow too, added later for the premium pass */
 .photo-slider-caption{color:#fff!important}
-.home-photo-slider-widget-slider-navigation-img.active{box-shadow:none!important;outline:3px solid var(--pb-green);outline-offset:-3px}
+.home-photo-slider-widget-slider-navigation-img.active{box-shadow:0 10px 20px -6px rgba(0,96,42,.4)!important;outline:3px solid var(--pb-green);outline-offset:-3px}
 
 /* news strip: label, headline and button share one vertical centre */
 .news-card-widget-scroll-container{display:flex!important;align-items:center!important;min-height:52px}
@@ -327,63 +507,219 @@ strong.notice-tag.pb-tag-new{background:var(--pb-red)!important;color:#fff!impor
 .home-carousel .slider-overlay{position:relative;z-index:5;padding:26px 20px 22px}
 @media (min-width:768px){.home-carousel .slider-overlay{padding:0}}
 
-/* =============== PREMIUM GLASS CARDS =============== */
-:root{--glass-bg:rgba(255,255,255,.55);--glass-brd:rgba(255,255,255,.6);--glass-shadow:0 8px 32px rgba(0,40,20,.14),0 1px 0 rgba(255,255,255,.6) inset}
-body{background:linear-gradient(160deg,#eef7f1 0%,#f7fbf8 45%,#eaf3ee 100%) fixed}
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget{
-  background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
-  border:1px solid var(--glass-brd)!important;box-shadow:var(--glass-shadow)!important;border-radius:18px!important;
-  position:relative;overflow:hidden!important}
-.block-widget-container::before,.notice-news-card-widget::before,.service-box-widget::before,.person-card-widget::before,
-.internal-eservice-card-widget::before,.important-link-card-widget::before,.video-card-carousel-container::before{
-  content:"";position:absolute;inset:0 0 auto 0;height:52%;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0));
-  pointer-events:none;z-index:0}
-.block-widget-container>*,.notice-news-card-widget>*,.service-box-widget>*,.person-card-widget>*{position:relative;z-index:1}
-.person-card-widget{padding-bottom:6px}
-.person-card-header,.block-widget .block-widget-title{background:linear-gradient(120deg,rgba(0,83,42,.85),rgba(0,133,50,.75))!important;
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25)!important;border-bottom:none!important;
-  border-radius:16px 16px 0 0!important;box-shadow:none!important}
-.service-box-widget:hover,.person-card-widget:hover{box-shadow:0 16px 44px rgba(0,60,30,.22),0 1px 0 rgba(255,255,255,.7) inset!important;
-  transform:translateY(-3px)}
-.pb-footer-main .text-xs{background:rgba(255,255,255,.85)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.office-findthree-widget select{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+/* =============== NOTICE BOARD — frosted glass =============== */
+/* a flat page gives backdrop-filter nothing to blur, so the "glass" just reads as plain translucent white.
+   soft, low-opacity color pools (brand green + gold, not rainbow) give the frosted panel something real to catch */
+body{
+  background:
+    radial-gradient(640px circle at 10% 6%,rgba(0,133,50,.14),transparent 60%),
+    radial-gradient(560px circle at 92% 28%,rgba(242,182,50,.16),transparent 58%),
+    radial-gradient(720px circle at 45% 105%,rgba(0,96,42,.10),transparent 60%),
+    linear-gradient(160deg,#eef7f1 0%,#f7fbf8 45%,#eaf3ee 100%);
+  background-attachment:fixed}
+
+.notice-news-card-widget{
+  background:linear-gradient(165deg,rgba(255,255,255,.76) 0%,rgba(255,255,255,.36) 55%,rgba(255,255,255,.58) 100%)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);
+  border:1px solid rgba(255,255,255,.55)!important;
+  /* bevelled rim (bright top-left catching light, faint dark bottom-right) is what sells "glass edge" over a flat border */
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,.9),
+    inset -1px -1px 0 rgba(0,55,28,.07),
+    0 20px 44px -18px rgba(0,60,30,.3),0 2px 8px rgba(0,50,25,.08)!important;
+  border-radius:18px!important;position:relative;overflow:hidden!important;
+  transform:perspective(1200px) rotateX(0) translateY(0);
+  transition:transform .45s var(--pb-ease),box-shadow .45s var(--pb-ease),border-color .45s var(--pb-ease)}
+/* diagonal gloss streak, the single most legible "this is glass" cue — a band of light crossing the panel */
+.notice-news-card-widget::before{
+  content:"";position:absolute;inset:-15% -10%;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.5) 44%,rgba(255,255,255,.14) 52%,transparent 64%);
+  pointer-events:none;z-index:0;transition:opacity .4s var(--pb-ease),transform .6s var(--pb-ease)}
+.notice-news-card-widget:hover::before{transform:translate(3%,-2%)}
+.notice-news-card-widget>*{position:relative;z-index:1}
+.notice-news-card-widget .notice-title{color:var(--pb-green-deep)!important}
+.notice-news-card-widget .notice-content-list{border-bottom-color:rgba(0,70,35,.12)!important}
+.notice-news-card-widget .notice-link:hover{background:rgba(255,255,255,.42)!important}
+.notice-news-card-widget .all-btn a{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* whole-card 3D lift: a light tilt plus a deeper, softer shadow that reads as the card rising off the page */
+.notice-news-card-widget:hover{
+  transform:perspective(1200px) rotateX(1.6deg) translateY(-8px);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,1),
+    inset -1px -1px 0 rgba(0,55,28,.09),
+    0 40px 70px -24px rgba(0,60,30,.42),0 14px 28px -8px rgba(0,55,28,.24),0 3px 8px rgba(0,50,25,.12)!important;
+  border-color:rgba(255,255,255,.75)!important}
+
+/* per-row depth: each notice pops slightly forward on its own hover, on top of the existing tint/caret motion */
+.notice-content-list{transition:transform .25s var(--pb-ease)}
+.notice-news-card-widget .notice-link:hover{box-shadow:0 10px 22px -14px rgba(0,60,30,.35)}
+.notice-news-card-widget .notice-content-list:has(.notice-link:hover){transform:translateY(-2px)}
+.notice-title i{transition:transform .3s var(--pb-ease),box-shadow .3s var(--pb-ease)}
+.notice-news-card-widget:hover .notice-title i{transform:translateY(-2px) rotate(-4deg);box-shadow:0 8px 16px -4px rgba(0,133,50,.3)}
+/* dot fallback (pre-JS, or if the date text ever doesn't parse): keep the original hover pop so it's never a dead end */
+.notice-content-icon .dot{transition:transform .25s var(--pb-ease),box-shadow .25s var(--pb-ease)}
+.notice-news-card-widget .notice-link:hover .notice-content-icon .dot{transform:scale(1.35);box-shadow:0 0 0 4px rgba(0,133,50,.16)}
+
+/* header: "N new" chip, filled in by polish.js counting the notices actually tagged New — real, not decorative */
+.notice-title{justify-content:space-between}
+.notice-title[data-new-count]::after{
+  content:attr(data-new-count) " new";
+  margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.2px;color:var(--pb-red);
+  background:rgba(229,48,63,.1);border:1px solid rgba(229,48,63,.25);border-radius:999px;padding:4px 10px;
+  white-space:nowrap}
+.notice-title[data-new-count="0"]::after{content:none}
+
+/* date stamp: the dot marker becomes a day/month badge, sourced from the notice's own date (polish.js sets data-day/data-mon) */
+.notice-content-icon:first-child{flex:none}
+.notice-content-icon[data-day] .dot{display:none}
+/* the site's own CSS has ".notice-content-icon:has(.dot){justify-content:flex-start}" — the hidden .dot
+   is still in the DOM so that rule still matches and out-specifies a plain [data-day] selector, which is
+   why the badge content was pinned to the top; scope + !important here to win over it for good */
+.notice-news-card-widget .notice-content-icon[data-day]{
+  display:flex;flex-direction:column;align-items:center;justify-content:center!important;
+  width:44px;height:44px;padding:0;border-radius:11px;
+  background:linear-gradient(165deg,rgba(255,255,255,.95),var(--pb-tint));
+  border:1px solid rgba(0,96,42,.16);
+  box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 4px 10px -4px rgba(0,60,30,.2);
+  transition:transform .25s var(--pb-ease),box-shadow .25s var(--pb-ease),border-color .25s var(--pb-ease)}
+.notice-content-icon[data-day]::before,
+.notice-content-icon[data-day]::after{display:block;text-align:center}
+.notice-content-icon[data-day]::before{
+  content:attr(data-day);width:100%;font-size:16px;font-weight:800;line-height:1;color:var(--pb-green-deep);letter-spacing:-.2px}
+.notice-content-icon[data-day]::after{
+  content:attr(data-mon);width:20px;margin:3px auto 0;padding-top:2px;
+  font-size:9.5px;font-weight:700;line-height:1;color:var(--pb-muted);letter-spacing:.3px;
+  border-top:1px solid rgba(0,96,42,.18)}
+.notice-news-card-widget .notice-link:hover .notice-content-icon[data-day]{
+  transform:translateY(-2px);border-color:rgba(0,96,42,.32);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 10px 18px -6px rgba(0,60,30,.3)}
+
+/* de-clutter the tag row now that the date lives in the badge: drop the redundant calendar glyph, mute the date text */
+.notice-text-wrap span.notice-tag i{display:none}
+.notice-text-wrap span.notice-tag{font-size:12.5px!important}
+
+/* the New pill gets a quiet live pulse — a signal worth noticing without shouting */
+strong.notice-tag.pb-tag-new{position:relative}
+strong.notice-tag.pb-tag-new::before{
+  content:"";position:absolute;inset:0;border-radius:999px;background:var(--pb-red);
+  animation:pbNoticePulse 2.2s var(--pb-ease) infinite}
+@keyframes pbNoticePulse{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(1.6)}}
+
+/* freshly posted notices get a soft gold rail down the left edge, distinct from the hover lift */
+.notice-content-list:has(.pb-tag-new){box-shadow:inset 3px 0 0 var(--pb-gold)}
+.notice-content-list:has(.pb-tag-new) .notice-link{padding-left:16px!important}
+
+/* same glass material at chip scale, so the "Common" tag reads as part of the panel rather than a flat sticker */
+.notice-news-card-widget strong.notice-tag:not(.pb-tag-new){
+  background:rgba(255,255,255,.55)!important;border-color:rgba(0,96,42,.18)!important;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* "Show all…" CTAs stay a fully opaque fill on purpose — a CTA's contrast isn't negotiable — but get
+   their own diagonal gloss streak so they read as the same glass material as the cards around them */
+.notice-news-card-widget .all-btn a,.service-box-expandable-stack-widget .all-btn{position:relative;overflow:hidden;isolation:isolate}
+.notice-news-card-widget .all-btn a::before,.service-box-expandable-stack-widget .all-btn::before{
+  /* z-index:-1, not 0 — the button's label is a bare text node (can't be given z-index of its own), and
+     per the CSS stacking order a z-index:0 sibling paints ABOVE ordinary inline content, not below it */
+  content:"";position:absolute;inset:-40% -10%;z-index:-1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 46%,rgba(255,255,255,.1) 54%,transparent 66%);
+  transition:transform .5s var(--pb-ease)}
+.notice-news-card-widget .all-btn a:hover::before,.service-box-expandable-stack-widget .all-btn:hover::before{transform:translateX(12%)}
+
+/* footer ticker: separate it from the list with a hairline + a small live dot instead of a flat label */
+.news-card-widget{margin-top:4px!important}
+.news-card-widget-news-title{position:relative;padding-left:26px!important}
+.news-card-widget-news-title::before{
+  content:"";position:absolute;left:10px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:pbTickerDot 1.8s ease-out infinite}
+@keyframes pbTickerDot{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}100%{box-shadow:0 0 0 6px rgba(255,255,255,0)}}
+
 @media (max-width:600px){
-  .block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .notice-news-card-widget{-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3)}
+}
+/* touch devices have no hover — skip the tilt/lift so nothing gets stuck mid-animation after a tap */
+@media (hover:none){
+  .notice-news-card-widget:hover{transform:none}
 }
 
-/* =============== 3D GLASSMORPHIC CARDS v2 =============== */
-body{background:#f6f8f7!important}
-:root{--g-bg:linear-gradient(155deg,rgba(255,255,255,.22),rgba(255,255,255,.08));--g-halo:0 0 0 1px rgba(255,255,255,.5) inset,0 20px 50px -12px rgba(0,110,55,.30),0 4px 14px rgba(0,80,40,.14)}
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget{background:var(--g-bg)!important}
-.person-card-widget,.notice-news-card-widget,.service-box-widget{box-shadow:var(--g-sh),var(--g-halo)!important}
-.person-card-widget{margin:0 2px}
+/* =============== SERVICE BOXES — same glass + 3D language as the Notice Board =============== */
+/* the body's colour pools (added for the Notice Board glass) already give these cards something to blur too */
+.service-box-widget{
+  background:linear-gradient(165deg,rgba(255,255,255,.78) 0%,rgba(255,255,255,.4) 55%,rgba(255,255,255,.6) 100%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);
+  border:1px solid rgba(255,255,255,.55)!important;
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,.9),
+    inset -1px -1px 0 rgba(0,55,28,.06),
+    inset 0 -3px 0 var(--pb-gold),
+    0 16px 36px -16px rgba(0,60,30,.26),0 2px 8px rgba(0,50,25,.07)!important;
+  border-radius:18px!important;position:relative;overflow:hidden;
+  transform:perspective(1200px) rotateX(0) translateY(0);
+  transition:transform .4s var(--pb-ease),box-shadow .4s var(--pb-ease),border-color .4s var(--pb-ease)}
+/* diagonal gloss streak — same material cue as the Notice Board panel */
+.service-box-widget::before{
+  content:"";position:absolute;inset:-20% -10%;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 44%,rgba(255,255,255,.12) 52%,transparent 64%);
+  pointer-events:none;z-index:0;transition:transform .6s var(--pb-ease)}
+.service-box-widget:hover::before{transform:translate(3%,-2%)}
+.service-box-widget .service-box-title,
+.service-box-widget .service-box-img-container,
+.service-box-widget .service-box-col-span-8{position:relative;z-index:1}
 
-/* fix: person cards inside the stack had zero gap between them (overlapping shadows) */
-.person-card-stack-widget{display:flex!important;flex-direction:column;gap:22px}
-.person-card-stack-widget .person-card-widget{margin:0 3px!important}
+/* 3D lift on hover: light tilt + a deeper shadow that reads as the card rising, matching the Notice Board */
+.service-box-widget:hover{
+  transform:perspective(1200px) rotateX(1.4deg) translateY(-7px)!important;
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255,255,255,1),
+    inset -1px -1px 0 rgba(0,55,28,.08),
+    inset 0 -3px 0 var(--pb-gold),
+    0 34px 60px -20px rgba(0,60,30,.36),0 12px 24px -8px rgba(0,55,28,.2),0 3px 8px rgba(0,50,25,.1)!important}
 
-/* let the page's own colored background show through instead of a flat card fill */
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget{
-  -webkit-backdrop-filter:blur(26px) saturate(2);backdrop-filter:blur(26px) saturate(2)}
+/* icon becomes a full-bleed gradient hero band across the card top, echoing the reference's photo header.
+   the real icon assets are tiny (~100px) mixed photos/illustrations — stretching them into a big "hero photo"
+   would just look blurry, so instead the band gives them a confident colour backdrop and the icon sits on
+   top as a small white plate, like a badge, rather than pretending it's full-bleed photography */
+.service-box-widget .service-box-img-container{
+  width:auto!important;height:104px;
+  margin:calc(var(--pb-card-pad) * -1) calc(var(--pb-card-pad) * -1) 16px;
+  border-radius:18px 18px 0 0!important;border:0!important;
+  background:linear-gradient(135deg,var(--pb-green) 0%,var(--pb-green-deep) 55%,#00341a 100%);
+  position:relative}
+.service-box-widget .service-box-img-container::before{
+  content:"";position:absolute;inset:-30% -10%;pointer-events:none;
+  background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.35) 46%,rgba(255,255,255,.08) 54%,transparent 66%)}
+.service-box-widget .service-box-img-container img{
+  width:58px!important;height:58px!important;padding:11px!important;
+  background:rgba(255,255,255,.94)!important;border-radius:14px!important;
+  box-shadow:0 10px 22px -6px rgba(0,20,10,.45),0 1px 0 rgba(255,255,255,.7) inset;
+  position:relative;z-index:1;
+  transition:transform .3s var(--pb-ease),box-shadow .3s var(--pb-ease)}
+.service-box-widget:hover .service-box-img-container img{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 14px 28px -6px rgba(0,20,10,.5),0 1px 0 rgba(255,255,255,.8) inset}
 
-/* remove the card's own painted fill entirely — pure glass, page background shows straight through */
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget,.pb-footer-main .text-xs{
-  background:transparent!important;-webkit-backdrop-filter:blur(14px) saturate(1.3)!important;backdrop-filter:blur(14px) saturate(1.3)!important}
-.block-widget-container::before,.notice-news-card-widget::before,.service-box-widget::before,.person-card-widget::before,
-.internal-eservice-card-widget::before,.important-link-card-widget::before,.video-card-carousel-container::before{display:none!important}
+/* premium type: more presence on the title, now its own full-width row under the band */
+.service-box-widget .service-box-title{font-size:19px!important;letter-spacing:.1px}
+
+/* the gold inset rail above (added to the base/hover box-shadow lists) is the closest honest echo of the
+   reference's bold bottom bar. a fake "view" button was considered and rejected: unlike the reference's
+   single-action booking card, each service card already offers several distinct links (the list below) —
+   a single bottom button would imply one action where there are actually four, which is exactly the kind
+   of mismatched affordance the ui-ux heuristics warn about (match the user's mental model / no dead-end promises) */
+@media (max-width:767px){
+  .service-box-widget .service-box-img-container{margin:-16px -16px 16px}
+}
+
+/* list rows: bullet lights up and the row nudges forward on its own hover, echoing the Notice Board rows */
+.service-box-bullet{transition:transform .2s var(--pb-ease),box-shadow .2s var(--pb-ease)}
+.service-box-list-item{transition:transform .2s var(--pb-ease)}
+.service-box-list-item:has(.service-box-list-link:hover){transform:translateX(3px)}
+.service-box-list-item:has(.service-box-list-link:hover) .service-box-bullet{
+  transform:scale(1.4);box-shadow:0 0 0 4px rgba(0,133,50,.16)}
+
+@media (max-width:600px){
+  .service-box-widget{-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3)}
+}
+@media (hover:none){
+  .service-box-widget:hover{transform:none!important}
+}

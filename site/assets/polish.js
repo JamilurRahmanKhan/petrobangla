@@ -24,6 +24,28 @@
   if(document.readyState==='complete')run();else addEventListener('load',run);
 })();
 
+/* notice board: turn the dot marker into a day/month date stamp (read from the notice's own date tag,
+   so it always matches — nothing hardcoded), and flag each card with how many notices are new */
+(function(){
+  function run(){
+    document.querySelectorAll('.notice-news-card-widget').forEach(function(w){
+      var title=w.querySelector('.notice-title');
+      if(title)title.dataset.newCount=w.querySelectorAll('strong.notice-tag.pb-tag-new').length;
+      w.querySelectorAll('.notice-link').forEach(function(a){
+        var badge=a.querySelector('.notice-content-icon:first-child');
+        var dateEl=a.querySelector('.notice-text-wrap span.notice-tag');
+        if(!badge||!dateEl||badge.dataset.day)return;
+        var parts=dateEl.textContent.trim().split('-');
+        if(parts.length!==3)return;
+        badge.dataset.day=parts[0].trim();
+        badge.dataset.mon=parts[1].trim();
+      });
+    });
+  }
+  if(document.readyState==='complete')run();else addEventListener('load',run);
+  setTimeout(run,600);setTimeout(run,1800);
+})();
+
 /* banner crossfade: mirror the widget's inline display toggling onto a class */
 (function(){
   function init(){
