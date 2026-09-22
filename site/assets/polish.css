@@ -387,21 +387,3 @@ body{background:#f6f8f7!important}
   background:transparent!important;-webkit-backdrop-filter:blur(14px) saturate(1.3)!important;backdrop-filter:blur(14px) saturate(1.3)!important}
 .block-widget-container::before,.notice-news-card-widget::before,.service-box-widget::before,.person-card-widget::before,
 .internal-eservice-card-widget::before,.important-link-card-widget::before,.video-card-carousel-container::before{display:none!important}
-
-/* =============== FINAL: neutral-glass cards with true 3D elevation =============== */
-:root{--glass-fill:linear-gradient(165deg,rgba(255,255,255,.72),rgba(255,255,255,.38));
-  --glass-edge:rgba(255,255,255,.9);
-  --shadow-3d:0 1px 1px rgba(20,40,30,.05),0 6px 10px -4px rgba(20,40,30,.10),0 20px 34px -10px rgba(20,40,30,.20),0 40px 64px -20px rgba(20,40,30,.22),inset 0 1px 0 rgba(255,255,255,.85)}
-.block-widget-container,.notice-news-card-widget,.service-box-widget,.person-card-widget,.internal-eservice-card-widget,
-.important-link-card-widget,.video-gallery-widget-slider,.home-photo-slider-widget-block,.video-card-carousel-container,
-.e-service-card-widget,.link-card-widget .block-widget-container,.emergency-hotline-card-list-widget,.my-gov-service-image-link-widget,
-.office-digital-service-image-link-widget,.bd-workers-trust-board-image-link-widget,.social-media-widget,.national-anthem-widget,
-.innovation-corner-widget,.office-attachment-application-form-widget,.pb-footer-main .text-xs{
-  background:var(--glass-fill)!important;-webkit-backdrop-filter:blur(20px) saturate(1.5)!important;backdrop-filter:blur(20px) saturate(1.5)!important;
-  border:1px solid var(--glass-edge)!important;box-shadow:var(--shadow-3d)!important;border-radius:18px!important;
-  transition:transform .35s cubic-bezier(.2,.8,.3,1),box-shadow .35s cubic-bezier(.2,.8,.3,1)}
-.service-box-widget:hover,.person-card-widget:hover,.internal-eservice-card-widget:hover{
-  transform:translateY(-6px)!important;
-  box-shadow:0 2px 2px rgba(20,40,30,.06),0 10px 16px -4px rgba(20,40,30,.14),0 30px 46px -12px rgba(20,40,30,.26),0 50px 80px -24px rgba(20,40,30,.28),inset 0 1px 0 rgba(255,255,255,.9)!important}
-@media (prefers-reduced-motion:reduce){.service-box-widget,.person-card-widget,.internal-eservice-card-widget{transition:none!important}
-  .service-box-widget:hover,.person-card-widget:hover,.internal-eservice-card-widget:hover{transform:none!important}}
