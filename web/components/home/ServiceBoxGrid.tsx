@@ -94,7 +94,7 @@ export function ServiceBoxGrid() {
                 <span className="grid h-11 w-11 flex-none place-items-center rounded-full bg-[#fdf1de] text-pb-green-deep">
                   <span className="h-6 w-6">{icon}</span>
                 </span>
-                <h3 className="text-[16px] font-bold text-pb-ink">{box.title}</h3>
+                <h3 className="text-[1rem] font-bold text-pb-ink">{box.title}</h3>
               </div>
 
               <ul className="relative mt-3 space-y-2">

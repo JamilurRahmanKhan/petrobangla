@@ -21,7 +21,7 @@ function LinkCard({
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-pb-line bg-white shadow-[0_16px_36px_-16px_rgba(0,60,30,0.26)]">
-      <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[15px] font-bold text-white">
+      <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[0.9375rem] font-bold text-white">
         {icon}
         {title}
       </div>
@@ -151,7 +151,7 @@ export function SidebarLinks() {
       </Link>
 
       <section className="overflow-hidden rounded-2xl border border-pb-line bg-white shadow-[0_16px_36px_-16px_rgba(0,60,30,0.26)]">
-        <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[15px] font-bold text-white">
+        <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[0.9375rem] font-bold text-white">
           {PhoneIcon}
           {ui.emergencyContact}
         </div>
@@ -191,7 +191,7 @@ export function SidebarLinks() {
         {newWebsiteApplication.label}
       </Link>
 
-      <div className="rounded-2xl bg-gradient-to-br from-pb-green-deep to-[#00341c] p-5 text-center text-[15px] font-bold leading-snug text-white">
+      <div className="rounded-2xl bg-gradient-to-br from-pb-green-deep to-[#00341c] p-5 text-center text-[0.9375rem] font-bold leading-snug text-white">
         {content.orgIdentity.subtitle}
       </div>
     </div>

@@ -39,7 +39,7 @@ export function NoticeBoard() {
             aria-hidden
             className="absolute inset-y-0 -right-2.5 left-0 bg-pb-gold [clip-path:polygon(0_0,100%_0,calc(100%-22px)_100%,0_100%)]"
           />
-          <span className="relative z-10 flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green py-3 pl-4 pr-9 text-[15px] font-bold text-white [clip-path:polygon(0_0,100%_0,calc(100%-22px)_100%,0_100%)]">
+          <span className="relative z-10 flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green py-3 pl-4 pr-9 text-[0.9375rem] font-bold text-white [clip-path:polygon(0_0,100%_0,calc(100%-22px)_100%,0_100%)]">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="m3 11 18-5v12L3 14v-3Z" />
               <path d="M7 14v5a2 2 0 0 0 2 2h1v-6" />
@@ -66,18 +66,18 @@ export function NoticeBoard() {
               >
                 <span className="grid h-12 w-12 flex-none place-items-center rounded-xl bg-[#fbe1db] text-center">
                   <span className="flex flex-col items-center leading-none">
-                    <span className="text-[16px] font-extrabold text-[#d1372a]">{day}</span>
-                    <span className="mt-0.5 text-[9.5px] font-bold uppercase text-[#d1372a]">{month}</span>
+                    <span className="text-[1rem] font-extrabold text-[#d1372a]">{day}</span>
+                    <span className="mt-0.5 text-[0.59375rem] font-bold uppercase text-[#d1372a]">{month}</span>
                   </span>
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-bold text-pb-green-deep">
+                  <span className="block truncate text-[0.9375rem] font-bold text-pb-green-deep">
                     {notice.title}
                   </span>
-                  <span className="mt-1 block truncate text-[13px] text-[#7a857e]">{notice.description}</span>
+                  <span className="mt-1 block truncate text-[0.8125rem] text-[#7a857e]">{notice.description}</span>
                 </span>
                 {notice.tags[1] && (
-                  <span className={`mt-1 flex-none rounded-full px-3 py-1.5 text-[12px] font-semibold ${TAG_STYLES[notice.tags[1]] ?? DEFAULT_TAG_STYLE}`}>
+                  <span className={`mt-1 flex-none rounded-full px-3 py-1.5 text-[0.75rem] font-semibold ${TAG_STYLES[notice.tags[1]] ?? DEFAULT_TAG_STYLE}`}>
                     {notice.tags[1]}
                   </span>
                 )}

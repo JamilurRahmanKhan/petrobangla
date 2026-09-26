@@ -67,18 +67,18 @@ export function HeroBanner() {
       <div className="relative flex min-h-[300px] max-w-[600px] flex-col justify-center gap-3.5 px-6 py-10 sm:min-h-[340px] sm:px-10">
         <div className="flex items-center gap-3.5">
           <Image src={orgIdentity.logo} alt="" width={52} height={52} className="rounded-full bg-white/95 p-1 drop-shadow-lg" />
-          <span className="max-w-[380px] text-[15px] font-bold leading-snug text-white drop-shadow">
+          <span className="max-w-[380px] text-[0.9375rem] font-bold leading-snug text-white drop-shadow">
             {orgIdentity.name}
           </span>
         </div>
 
-        <h1 className="text-[26px] font-extrabold leading-[1.3] text-white drop-shadow-lg sm:text-[32px]">
+        <h1 className="text-[1.625rem] font-extrabold leading-[1.3] text-white drop-shadow-lg sm:text-[2rem]">
           {heroTagline.headline}
         </h1>
 
         <span className="h-[3px] w-16 rounded bg-gradient-to-r from-[#e11d1d] via-pb-gold to-[#1a8f3e]" />
 
-        <p className="max-w-[440px] text-[15px] font-medium leading-relaxed text-white/90 drop-shadow">
+        <p className="max-w-[440px] text-[0.9375rem] font-medium leading-relaxed text-white/90 drop-shadow">
           {heroTagline.subtext}
         </p>
       </div>

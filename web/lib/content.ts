@@ -63,6 +63,23 @@ type Content = {
   innovationCorner: { item: string; itemHref: string; showAllHref: string };
   newWebsiteApplication: { label: string; href: string };
   facebookUrl: string;
+  accessibility: {
+    title: string;
+    open: string;
+    close: string;
+    fontIncrease: string;
+    fontDecrease: string;
+    monochrome: string;
+    invert: string;
+    bigCursor: string;
+    highlightLinks: string;
+    highlightHeadings: string;
+    readingGuide: string;
+    reset: string;
+    screenReader: string;
+    skipToContent: string;
+    skipToMenu: string;
+  };
   footer: {
     utilityLinks: { label: string; href: string }[];
     planningCredit: string;
@@ -426,6 +443,23 @@ const en: Content = {
     label: "Application for new website of government office",
     href: "https://pms.portal.gov.bd/office/outauth_new_office",
   },
+  accessibility: {
+    title: "Accessibility",
+    open: "Accessibility",
+    close: "Close",
+    fontIncrease: "Font Increase",
+    fontDecrease: "Font Decrease",
+    monochrome: "Monochrome",
+    invert: "Invert",
+    bigCursor: "Big Cursor",
+    highlightLinks: "Highlight Links",
+    highlightHeadings: "Highlight Headings",
+    readingGuide: "Reading Guide",
+    reset: "Reset",
+    screenReader: "Download Screen Reader",
+    skipToContent: "Skip to content",
+    skipToMenu: "Go to accessibility menu",
+  },
   footer: {
     // The 6 utility links, disclaimer, "planning & implementation" credit and last-updated
     // stamp are real, pulled from the live footer widget. The 4-column contact block (address,
@@ -763,6 +797,23 @@ const bn: Content = {
   newWebsiteApplication: {
     label: "সরকারি অফিসের নতুন ওয়েবসাইটের আবেদন",
     href: "https://pms.portal.gov.bd/office/outauth_new_office",
+  },
+  accessibility: {
+    title: "এক্সেসিবিলিটি",
+    open: "এক্সেসিবিলিটি",
+    close: "বন্ধ করুন",
+    fontIncrease: "ফন্ট বৃদ্ধি",
+    fontDecrease: "ফন্ট হ্রাস",
+    monochrome: "মনোক্রোম",
+    invert: "ইনভার্ট",
+    bigCursor: "বড় কার্সর",
+    highlightLinks: "লিঙ্ক হাইলাইট",
+    highlightHeadings: "শিরোনাম হাইলাইট",
+    readingGuide: "পড়ার গাইড",
+    reset: "রিসেট",
+    screenReader: "স্ক্রিন রিডার ডাউনলোড করুন",
+    skipToContent: "কন্টেন্টে চলে যান",
+    skipToMenu: "এক্সেসিবিলিটি মেনুতে যান",
   },
   footer: {
     utilityLinks: [

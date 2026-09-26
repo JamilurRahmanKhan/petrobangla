@@ -10,7 +10,7 @@ export function MinisterCard() {
 
   return (
     <section className="relative overflow-hidden rounded-2xl border border-pb-line bg-white shadow-[0_16px_36px_-16px_rgba(0,60,30,0.26)]">
-      <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[15px] font-bold text-white">
+      <div className="flex items-center gap-2 bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3 text-[0.9375rem] font-bold text-white">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="8" r="4" />
           <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7" />
@@ -27,7 +27,7 @@ export function MinisterCard() {
           className="h-[140px] w-[110px] flex-none rounded-xl object-cover"
         />
         <div className="min-w-0 pt-1">
-          <p className="text-[17px] font-extrabold leading-snug text-pb-green-deep">{minister.name}</p>
+          <p className="text-[1.0625rem] font-extrabold leading-snug text-pb-green-deep">{minister.name}</p>
           <p className="mt-1.5 text-sm text-pb-ink">{minister.role}</p>
           <p className="text-sm text-pb-ink">{minister.ministry}</p>
           <p className="text-sm text-pb-ink">{orgIdentity.subtitle}</p>

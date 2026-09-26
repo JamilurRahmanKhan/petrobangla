@@ -60,3 +60,14 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* Accessibility widget effects — same rules the live petrobangla.org.bd widget applies to <html>. */
+html.monochrome { filter: grayscale() contrast(120%); }
+html.inverted { filter: invert(75%) contrast(120%); background: #fff; }
+html.bigCursor, html.bigCursor * { cursor: url("/images/big-cursor.svg"), auto !important; }
+html.highlightLinks a { color: #000 !important; background-color: rgb(220, 231, 133) !important; }
+html.highlightHeadings h1, html.highlightHeadings h2, html.highlightHeadings h3,
+html.highlightHeadings h4, html.highlightHeadings h5, html.highlightHeadings h6 {
+  color: #000 !important;
+  background-color: rgb(174, 192, 10) !important;
+}

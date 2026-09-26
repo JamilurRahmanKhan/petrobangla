@@ -13,7 +13,7 @@ export function ParticipationBanner() {
 
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-pb-green-deep to-[#00341c] p-5">
-      <p className="relative z-10 max-w-[220px] text-[15px] font-bold leading-snug text-white">
+      <p className="relative z-10 max-w-[220px] text-[0.9375rem] font-bold leading-snug text-white">
         {participationBanner.headline}
       </p>
 

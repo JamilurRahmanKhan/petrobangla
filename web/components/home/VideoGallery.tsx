@@ -11,7 +11,7 @@ export function VideoGallery() {
   return (
     <section className="overflow-hidden rounded-2xl border border-pb-line bg-white shadow-[0_16px_36px_-16px_rgba(0,60,30,0.26)]">
       <div className="flex items-center justify-between bg-gradient-to-r from-pb-green-deep to-pb-green px-4 py-3">
-        <span className="flex items-center gap-2 text-[15px] font-bold text-white">
+        <span className="flex items-center gap-2 text-[0.9375rem] font-bold text-white">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none">
             <path d="M8 5v14l11-7z" />
           </svg>
@@ -47,7 +47,7 @@ export function VideoGallery() {
                 </span>
               </span>
             </div>
-            <p className="px-3 py-3 text-[16.5px] font-bold text-pb-ink">{video.title}</p>
+            <p className="px-3 py-3 text-[1.03125rem] font-bold text-pb-ink">{video.title}</p>
           </article>
         ))}
       </div>

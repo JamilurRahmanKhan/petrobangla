@@ -33,11 +33,11 @@ export function SiteHeader() {
           <span className="flex flex-col gap-0.5">
             <Link
               href="/"
-              className="max-w-[520px] text-[18px] font-extrabold leading-[1.32] text-pb-green-deep"
+              className="max-w-[520px] text-[1.125rem] font-extrabold leading-[1.32] text-pb-green-deep"
             >
               {orgIdentity.name}
             </Link>
-            <a href={natPortal.href} className="text-[13px] font-medium text-[#7a8a7e] hover:underline">
+            <a href={natPortal.href} className="text-[0.8125rem] font-medium text-[#7a8a7e] hover:underline">
               {orgIdentity.badge}
             </a>
           </span>

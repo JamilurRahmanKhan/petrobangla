@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Sans_Bengali } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { MainNav } from "@/components/layout/MainNav";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { AccessibilityWidget } from "@/components/layout/AccessibilityWidget";
 import { LocaleProvider } from "@/lib/locale-context";
 import "./globals.css";
 
@@ -42,11 +43,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col bg-pb-cream">
         <LocaleProvider>
+          <AccessibilityWidget />
           <SiteHeader />
           <MainNav />
           {/* Decorative mandala-corner texture behind the whole main content area, tiled
               (bg-repeat) since one copy of the artwork is shorter than the page. */}
-          <main className="flex-1 bg-[url('/images/section-bg-mobile.webp')] bg-repeat lg:bg-[url('/images/section-bg-desktop.webp')]">
+          <main id="main-content" className="flex-1 bg-[url('/images/section-bg-mobile.webp')] bg-repeat lg:bg-[url('/images/section-bg-desktop.webp')]">
             {children}
           </main>
           <SiteFooter />

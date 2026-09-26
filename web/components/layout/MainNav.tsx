@@ -92,7 +92,7 @@ export function MainNav() {
               id={`s${i}`}
               openIndex={openIndex}
               setOpenIndex={setOpenIndex}
-              className="rounded-full px-3 py-1.5 text-[13px] font-medium text-[#5d7060] hover:bg-pb-tint hover:text-pb-green-deep"
+              className="rounded-full px-3 py-1.5 text-[0.8125rem] font-medium text-[#5d7060] hover:bg-pb-tint hover:text-pb-green-deep"
             />
           ))}
         </ul>
