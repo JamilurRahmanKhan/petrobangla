@@ -46,6 +46,53 @@
   setTimeout(run,600);setTimeout(run,1800);
 })();
 
+/* header redesign: brand lockup (logo + real org name pulled from the hero's own .office-title — nothing
+   fabricated) and a new Login pill, since there's nowhere in the markup that already has either. */
+(function(){
+  function run(){
+    var section=document.querySelector('.header-widget-section .header-left-section');
+    var logoImg=document.querySelector('.office-logo');
+    var orgTitle=document.querySelector('.office-title');
+    var natLink=section&&section.querySelector('.header-title');
+    if(section&&logoImg&&orgTitle&&natLink&&!section.querySelector('.pb-header-brand')){
+      var brand=document.createElement('a');
+      brand.href='/';brand.className='pb-header-brand';
+      var img=document.createElement('img');
+      img.src=logoImg.getAttribute('src');img.alt='';
+      var textCol=document.createElement('span');
+      textCol.className='pb-header-brand-text';
+      var name=document.createElement('span');
+      name.className='pb-header-brand-name';
+      name.textContent=orgTitle.textContent.trim();
+      textCol.appendChild(name);
+      brand.appendChild(img);
+      brand.appendChild(textCol);
+      section.insertBefore(brand,natLink);
+      natLink.classList.add('pb-header-natportal-link');
+      natLink.dataset.origText=natLink.textContent.trim();
+      // reference design's caption here, in English on both language versions (matches the reference
+      // images exactly, including the Bengali one). "Government of Bangladesh" is also the first half
+      // of the hero's own badge text (.office-left-section::before in polish.css), not invented copy.
+      // href is untouched — still the real link to bangladesh.gov.bd.
+      natLink.textContent='Government of Bangladesh';
+      textCol.appendChild(natLink);
+    }
+
+    var bar=document.querySelector('.global-searchbar');
+    if(bar&&!bar.querySelector('.pb-header-login')){
+      var langInput=document.querySelector('.language-switcher-widget input[type=hidden]');
+      var isBn=langInput&&langInput.value==='bn';
+      var a=document.createElement('a');
+      a.href='/login';a.className='pb-header-login';
+      a.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+        +'stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>'
+        +'<circle cx="12" cy="7" r="4"/></svg><span>'+(isBn?'লগইন':'Login')+'</span>';
+      bar.appendChild(a);
+    }
+  }
+  if(document.readyState==='complete')run();else addEventListener('load',run);
+})();
+
 /* banner crossfade: mirror the widget's inline display toggling onto a class */
 (function(){
   function init(){

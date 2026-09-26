@@ -11,19 +11,61 @@
 html{scroll-behavior:smooth}
 body{color:var(--pb-ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
-/* ---- top utility bar ---- */
-/* select/button styling lives in ONE place now: the "office finder row" section further down. It used to
-   be split across here and there, which is exactly how the last regression happened (two rules for the
-   same element, edited one and not the other) */
-.header-widget-section{background:linear-gradient(90deg,var(--pb-green-ink),var(--pb-green-deep) 45%,var(--pb-green))!important}
-/* the office-finder's wrapping section defaults to min-width:auto as a flex item of the header row, which
-   (same issue as the office-group chain below) can block it from ever shrinking — only the second
-   .header-left-section (office finder), never the first (site title, which should stay fully readable) */
-.header-widget-section .header-left-section+.header-left-section{min-width:0}
-.global-search-widget input{box-shadow:0 2px 8px rgba(0,0,0,.15);transition:box-shadow .2s var(--pb-ease)}
-.global-search-widget input:focus{box-shadow:0 0 0 3px rgba(242,182,50,.55)}
-.global-search-widget{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border-radius:999px!important;overflow:hidden}
-.language-switcher-widget .btn-lang-change{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+/* ---- top utility bar: cream + brand lockup, per client-supplied reference design ---- */
+.header-widget-section{
+  background:#f8f4e8!important;border-bottom:1px solid #e8e0c8!important;
+  padding-top:10px!important;padding-bottom:10px!important}
+/* office-finder removed from the header per explicit sign-off (it's a real navigation feature, not
+   decoration — hidden rather than deleted from the DOM, so it's a one-line revert if it's wanted back) */
+.header-widget-section .header-left-section:has(.office-findthree-widget){display:none!important}
+
+/* brand lockup (logo + real org name, cloned from the hero's own .office-title by polish.js — not
+   fabricated copy) with the real "Bangladesh National Portal" link demoted to a small caption line
+   underneath, in the same slot the reference design uses for "Government of Bangladesh". The link's
+   href still points at bangladesh.gov.bd (untouched); polish.js only changes its displayed label to
+   match the reference's exact caption text — a true description of the site, and one already used
+   verbatim in the hero badge elsewhere on this page, not new copy invented for this spot. */
+.pb-header-brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.pb-header-brand img{width:68px;height:68px;object-fit:contain;flex:none}
+.pb-header-brand-text{display:flex;flex-direction:column;gap:2px}
+.pb-header-brand-name{font-weight:800;font-size:18px;line-height:1.32;color:var(--pb-green-deep);max-width:520px}
+.header-widget-section .header-title.pb-header-natportal-link{
+  color:#7a8a7e!important;font-size:13px!important;font-weight:500!important;
+  min-width:0!important;margin:0!important;line-height:1.3!important}
+
+/* search / language pills flip from "white on dark green" to "white pill on cream", matching the reference */
+.global-search-widget{
+  background:#fff!important;border:1px solid #e3ddc4!important;box-shadow:0 1px 3px rgba(0,0,0,.06)!important;
+  -webkit-backdrop-filter:none;backdrop-filter:none;border-radius:999px!important;overflow:hidden}
+.global-search-widget input{color:var(--pb-ink)!important;box-shadow:none!important}
+.global-search-widget input::placeholder{color:#9a9478}
+.global-search-widget input:focus{box-shadow:0 0 0 3px rgba(0,133,50,.18)!important}
+.global-search-widget .btn-search{
+  background:transparent!important;color:var(--pb-green-deep)!important;font-size:0!important;
+  width:34px!important;padding:0!important;display:grid!important;place-items:center}
+.global-search-widget .btn-search::before{
+  content:"";width:16px;height:16px;display:block;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300602a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") center/contain no-repeat}
+/* the reference shows this with no pill/border at all — just icon + text floating on the cream bar,
+   the plainest element in the row (search and Login are the only two actual "buttons") */
+.language-switcher-widget .btn-lang-change{
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  color:var(--pb-green-deep)!important;background:transparent!important;border:none!important;
+  box-shadow:none!important;padding:0 4px!important}
+.language-switcher-widget .btn-lang-change:hover{background:rgba(0,96,42,.06)!important;border-radius:8px}
+.language-switcher-widget .btn-lang-change::before{
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300602a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9.5'/%3E%3Cpath d='M2.5 12h19M4 7h16M4 17h16'/%3E%3C/svg%3E") center/contain no-repeat!important}
+
+/* new Login pill, injected by polish.js next to the language switcher — there's no auth system behind
+   this site yet, so it's a styled placeholder (links to /login, which 404s today) rather than a promise
+   of working sign-in. Swap the href once a real login page exists. */
+.pb-header-login{
+  display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 16px;border-radius:999px;flex:none;
+  background:linear-gradient(180deg,var(--pb-green),var(--pb-green-deep));color:#fff;font-weight:600;font-size:14px;
+  text-decoration:none;transition:transform .2s var(--pb-ease),box-shadow .2s var(--pb-ease);
+  box-shadow:0 2px 8px rgba(0,96,42,.3)}
+.pb-header-login:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,96,42,.4)}
+.pb-header-login svg{width:16px;height:16px}
 
 /* ---- banner: legible title, clear of the corporate logo ---- */
 .home-carousel{position:relative;isolation:isolate}
@@ -37,12 +79,41 @@ body{color:var(--pb-ink);-webkit-font-smoothing:antialiased;text-rendering:optim
 .home-carousel .nav-btn{backdrop-filter:blur(6px);background:rgba(255,255,255,.22)!important;border-radius:50%;transition:background .2s var(--pb-ease),transform .2s var(--pb-ease)}
 .home-carousel .nav-btn:hover{background:rgba(255,255,255,.42)!important;transform:scale(1.08)}
 
-/* ---- main navigation ---- */
-.menus-expandable-widget{background:linear-gradient(180deg,var(--pb-green) 0%,var(--pb-green-deep) 100%)!important;box-shadow:0 6px 16px rgba(0,50,25,.25);position:relative;z-index:20}
-.menu-parent-list:hover>.menu-parent-list-link,.menu-parent-list-link:focus-visible{box-shadow:inset 0 -3px 0 var(--pb-gold);background:rgba(255,255,255,.08)}
+/* ---- main navigation: white bar, dark-green links, "Home" as a solid pill — per reference ---- */
+.menus-expandable-widget{background:#fff!important;border-top:1px solid #eef1ea!important;box-shadow:0 2px 6px rgba(0,30,15,.05)!important;position:relative;z-index:20}
+.menus-expandable-widget .menu-widget .megamenu-link>a{--menu-text-color:var(--pb-green-deep);--menu-background-color:transparent}
 .menu-parent-list-link{font-weight:600;transition:color .2s var(--pb-ease),background .2s var(--pb-ease)}
+.menu-parent-list:hover>.menu-parent-list-link,.menu-parent-list-link:focus-visible{
+  box-shadow:none!important;background:var(--pb-tint)!important;border-radius:999px}
 .menu-parent-list-link-icon{transition:transform .25s var(--pb-ease)}
 .menu-parent-list:hover .menu-parent-list-link-icon{transform:rotate(180deg)}
+.hamburger-menu-block,.hamburger-menu-block span{color:var(--pb-green-deep)!important}
+
+/* "Home": icon + a real localized label. The base theme already sets the right text via a
+   --home-label CSS variable (per-language, already correct — 'Home' / 'হোম'), but its own CSS had
+   `content:var(--home-label)` immediately followed by `content:" "` in the very same rule, and the
+   second declaration always wins — so the label was silently rendered as a blank space on every page.
+   Restated here (without the conflicting fallback) so the label actually shows. */
+/* scoped as ".menu-widget .home-link" (not bare ".home-link") to match/beat the base theme's own
+   ".menu-widget .home-link{padding:0!important}" — both declarations carry !important, so with equal
+   importance it comes down to specificity, and a bare single-class selector loses to that one */
+.menu-widget .home-link{
+  background-image:none!important;width:auto!important;height:auto!important;
+  display:inline-flex!important;align-items:center;gap:8px;
+  background:linear-gradient(180deg,var(--pb-green),var(--pb-green-deep))!important;
+  color:#fff!important;border-radius:999px!important;padding:9px 18px!important;font-weight:700}
+.home-link::before{
+  content:"";width:16px;height:16px;flex:none;display:inline-block;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11l9-8 9 8'/%3E%3Cpath d='M5 10v10h14V10'/%3E%3C/svg%3E") center/contain no-repeat}
+/* thin green rail under the whole Home pill — the reference's active-tab indicator */
+.menu-widget .megamenu-link:first-child{position:relative}
+.menu-widget .megamenu-link:first-child::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;
+  background:var(--pb-green-deep);border-radius:2px}
+.menus-expandable-widget.max-view .menu-widget .megamenu-link:first-child a{
+  filter:none!important;background-position-y:0!important}
+.menus-expandable-widget.max-view .menu-widget .megamenu-link:first-child a::after{
+  content:var(--home-label)!important;padding:0!important}
 .mega-menu-dropdown{border-radius:0 0 var(--pb-radius) var(--pb-radius)!important;box-shadow:0 18px 40px rgba(0,40,20,.22)!important;border-top:3px solid var(--pb-gold)!important;animation:pbDrop .22s var(--pb-ease)}
 @keyframes pbDrop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .menu-sub-child-link{border-radius:6px;transition:background .15s,color .15s,padding-left .2s var(--pb-ease)}
@@ -82,8 +153,9 @@ a[class*=btn]:hover,a[class*=view-all]:hover{transform:translateY(-2px);box-shad
   .pb-reveal{opacity:1;transform:none}
 }
 
-/* mobile menu toggle: AA contrast on green */
-.hamburger-menu-block,.hamburger-menu-block span{color:#fff!important;font-weight:600}
+/* mobile menu toggle: nav bar is white now (was green), so this needs dark-on-light contrast —
+   the actual color rule lives with the rest of the nav redesign, above; this just keeps the weight */
+.hamburger-menu-block,.hamburger-menu-block span{font-weight:600}
 
 /* ---- office finder row: equal controls, one height, one alignment ---- */
 /* min-width:0 on every level of this flex chain, not just the selects themselves — a flex container that is
@@ -172,17 +244,12 @@ a[class*=btn]:hover,a[class*=view-all]:hover{transform:translateY(-2px);box-shad
   .widget.office-findthree-widget .office-group,.widget.office-findthree-widget .dynamic-dropdowns{flex-direction:column;align-items:center}
 }
 
-/* ---- language switcher: vector globe, pill button ---- */
-.language-switcher-widget .btn-lang-change{
-  height:30px!important;padding:0 12px 0 10px!important;gap:7px!important;border-radius:999px!important;
-  font-size:14px!important;font-weight:600;letter-spacing:.2px;color:#fff!important;
-  background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.3)!important;
-  transition:background .2s var(--pb-ease),border-color .2s var(--pb-ease),transform .2s var(--pb-ease)}
-.language-switcher-widget .btn-lang-change:hover{background:rgba(255,255,255,.26)!important;border-color:rgba(255,255,255,.6)!important}
-.language-switcher-widget .btn-lang-change:active{transform:scale(.97)}
-.language-switcher-widget .btn-lang-change::before{
-  width:18px!important;height:18px!important;transform:none!important;flex:none;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9.5'/%3E%3Cpath d='M2.5 12h19M4 7h16M4 17h16'/%3E%3C/svg%3E") center/contain no-repeat!important}
+/* language switcher's real rules now live with the rest of the header redesign, near the top of this
+   file — this whole block was the OLD pre-redesign version (white text + white globe icon, built for the
+   dark-green header). It was never removed, sat here with equal-specificity !important declarations
+   LATER in the file, and was quietly winning the cascade the whole time — the language button has
+   probably been rendering white-on-white (invisible) since the cream redesign, however correct it looked
+   in a downscaled test screenshot. This is the concrete bug behind "language button not matching". */
 
 /* =====================================================================
    MAIN COLUMN — consistent card system, clear hierarchy, 44px targets
@@ -486,9 +553,10 @@ strong.notice-tag.pb-tag-new{background:var(--pb-red)!important;color:#fff!impor
 .home-carousel .slider-left{padding-left:4px}
 .home-carousel .nav-btn{width:44px!important;height:44px!important}
 
-/* nav bar: crisper separation + active feel */
-.menus-expandable-widget{border-top:1px solid rgba(255,255,255,.14)}
-.header-widget-section{border-bottom:2px solid var(--pb-gold)}
+/* nav bar / header borders: the real rules are with the rest of the header redesign near the top of
+   this file. This pair (white border-top for a dark bar, gold border-bottom) was pre-redesign leftover
+   — harmless since the newer rules carry !important and these don't, but dead conflicting CSS in the
+   same file is exactly how the language-switcher bug happened, so it's cleared out rather than left. */
 @media (max-width:767px){.home-carousel .office-left-section::before{font-size:11px;padding:5px 10px}}
 
 /* hero: fix vertical alignment so the badge doesn't push the title into the middle */

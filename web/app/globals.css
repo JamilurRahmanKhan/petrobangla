@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — carried over from site/assets/polish.css (the CSS overlay built earlier for the
+ * mirrored static site) so this Next.js rebuild looks like a continuation, not a different product.
+ */
+:root {
+  --pb-green: #008532;
+  --pb-green-deep: #00602a;
+  --pb-green-ink: #00461f;
+  --pb-red: #e5303f;
+  --pb-gold: #f2b632;
+  --pb-ink: #1b2a22;
+  --pb-line: #e3ece6;
+  --pb-tint: #f4faf6;
+  --pb-cream: #f8f4e8;
+  --pb-cream-line: #e8e0c8;
+  --pb-radius: 12px;
+  --pb-radius-sm: 8px;
+  --pb-shadow: 0 1px 2px rgba(0, 40, 20, 0.06), 0 6px 18px rgba(0, 40, 20, 0.07);
+  --pb-shadow-hover: 0 2px 4px rgba(0, 40, 20, 0.08), 0 14px 30px rgba(0, 40, 20, 0.14);
+  --pb-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --background: #ffffff;
+  --foreground: var(--pb-ink);
+}
+
+@theme inline {
+  --color-pb-green: var(--pb-green);
+  --color-pb-green-deep: var(--pb-green-deep);
+  --color-pb-green-ink: var(--pb-green-ink);
+  --color-pb-red: var(--pb-red);
+  --color-pb-gold: var(--pb-gold);
+  --color-pb-ink: var(--pb-ink);
+  --color-pb-line: var(--pb-line);
+  --color-pb-tint: var(--pb-tint);
+  --color-pb-cream: var(--pb-cream);
+  --color-pb-cream-line: var(--pb-cream-line);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-noto-bengali), var(--font-geist-sans), Arial, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
